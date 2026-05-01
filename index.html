@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENCODE HARD - TOOLS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 32px;
+            background: linear-gradient(135deg, #ff0040, #ff6680);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .header p {
+            color: #888;
+            margin-top: 8px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 10px 28px;
+            background: #1a1a2e;
+            border: 1px solid #333;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .tab.active, .tab:hover {
+            background: #ff0040;
+            border-color: #ff0040;
+            color: white;
+        }
+
+        .card {
+            background: rgba(20,20,30,0.95);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid #333;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ff0040;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #333;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 14px;
+            background: #0a0a0f;
+            border: 1px solid #333;
+            border-radius: 12px;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin-bottom: 15px;
+            resize: vertical;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #ff0040;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 24px;
+            background: #ff0040;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        .btn:hover {
+            background: #ff3355;
+            transform: translateY(-2px);
+        }
+        .btn-clear {
+            background: #2a2a35;
+        }
+        .btn-clear:hover {
+            background: #3a3a45;
+        }
+
+        .output-area {
+            margin-top: 25px;
+            display: none;
+        }
+        .output-label {
+            color: #00ff41;
+            font-size: 13px;
+            margin-bottom: 10px;
+            padding-left: 5px;
+            border-left: 3px solid #ff0040;
+        }
+        .output-box {
+            background: #0a0a0f;
+            border-radius: 12px;
+            border: 1px solid #333;
+            overflow: hidden;
+        }
+        .output-toolbar {
+            background: #111118;
+            padding: 10px 15px;
+            border-bottom: 1px solid #333;
+            text-align: right;
+        }
+        .output-content {
+            padding: 15px;
+            max-height: 400px;
+            overflow: auto;
+        }
+        .output-content pre {
+            color: #e6edf3;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin: 0;
+        }
+        .copy-btn {
+            background: #238636;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .copy-btn:hover {
+            background: #2ea043;
+        }
+        .download-btn {
+            background: #da3633;
+            margin-left: 8px;
+        }
+        .download-btn:hover {
+            background: #f85149;
+        }
+        .status {
+            background: #0a0a0f;
+            border-radius: 10px;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            color: #aaa;
+            border-left: 3px solid #ff0040;
+        }
+        .info {
+            background: #0a0a0f;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 15px;
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            padding: 15px;
+            color: #555;
+            font-size: 11px;
+        }
+        @media (max-width: 600px) {
+            .card { padding: 18px; }
+            .tab { padding: 7px 18px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🔐 ENCODE HARD TOOLS</h1>
+        <p>5 Layer Encode | Decode | Generate Auto Decode</p>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" data-tab="encode">🔐 ENCODE</div>
+        <div class="tab" data-tab="decode">🔓 DECODE</div>
+        <div class="tab" data-tab="generate">🚀 GENERATE</div>
+    </div>
+
+    <!-- PANEL ENCODE -->
+    <div id="panelEncode" class="card">
+        <div class="card-title">📝 STEP 1: ENCODE HARD</div>
+        <div class="status" id="statusEncode">💡 Masukkan teks, lalu klik ENCODE</div>
+        <textarea id="inputText" rows="4" placeholder="Masukkan teks atau kode HTML...&#10;Contoh: &lt;h1&gt;Halo Dunia&lt;/h1&gt;"></textarea>
+        <div class="btn-group">
+            <button class="btn" id="btnEncode">🔥 ENCODE</button>
+            <button class="btn btn-clear" id="btnClearEncode">🗑️ Clear</button>
+        </div>
+        <div id="encodeOutput" class="output-area">
+            <div class="output-label">📦 HASIL ENCODE (5 LAYER)</div>
+            <div class="output-box">
+                <div class="output-toolbar">
+                    <button class="copy-btn" id="copyEncode">📋 COPY</button>
+                </div>
+                <div class="output-content">
+                    <pre id="encodeResult"></pre>
+                </div>
+            </div>
+            <div class="info">💡 Simpan hasil encode untuk STEP 2 dan STEP 3</div>
+        </div>
+    </div>
+
+    <!-- PANEL DECODE -->
+    <div id="panelDecode" class="card" style="display:none;">
+        <div class="card-title">🔓 STEP 2: DECODE</div>
+        <div class="status" id="statusDecode">💡 Paste hasil encode, lalu klik DECODE</div>
+        <textarea id="encodedInput" rows="3" placeholder="Paste hasil encode di sini..."></textarea>
+        <div class="btn-group">
+            <button class="btn" id="btnDecode">🧪 DECODE</button>
+            <button class="btn btn-clear" id="btnClearDecode">🗑️ Clear</button>
+        </div>
+        <div id="decodeOutput" class="output-area">
+            <div class="output-label">🔓 HASIL DECODE (Teks Asli)</div>
+            <div class="output-box">
+                <div class="output-toolbar">
+                    <button class="copy-btn" id="copyDecode">📋 COPY</button>
+                </div>
+                <div class="output-content">
+                    <pre id="decodeResult"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL GENERATE -->
+    <div id="panelGenerate" class="card" style="display:none;">
+        <div class="card-title">🚀 STEP 3: GENERATE AUTO DECODE</div>
+        <div class="status" id="statusGenerate">💡 Paste hasil encode, lalu klik GENERATE</div>
+        <textarea id="generateInput" rows="3" placeholder="Paste hasil encode di sini..."></textarea>
+        <div class="btn-group">
+            <button class="btn" id="btnGenerate">📄 GENERATE</button>
+            <button class="btn btn-clear" id="btnClearGenerate">🗑️ Clear</button>
+        </div>
+        <div id="generateOutput" class="output-area">
+            <div class="output-label">📁 AUTO DECODE HTML (READY PAKAI)</div>
+            <div class="output-box">
+                <div class="output-toolbar">
+                    <button class="copy-btn" id="copyGenerate">📋 COPY</button>
+                    <button class="copy-btn download-btn" id="downloadGenerate">💾 DOWNLOAD</button>
+                </div>
+                <div class="output-content">
+                    <pre id="generateResult"></pre>
+                </div>
+            </div>
+            <div class="info">✅ File ini bisa langsung dibuka di browser & auto decode 5 layer!</div>
+        </div>
+    </div>
+
+    <div class="footer">🔐 5 Layer: Base64 → Rot13 → Reverse → XOR 0x42 → URL Encode</div>
+</div>
+
+<script>
+    // ========== BASE64 (SUPPORT UTF-8) ==========
+    function encodeBase64(str) {
+        try { return btoa(str); }
+        catch(e) {
+            return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(m, p) {
+                return String.fromCharCode('0x' + p);
+            }));
+        }
+    }
+    
+    function decodeBase64(str) {
+        try { return atob(str); }
+        catch(e) {
+            return decodeURIComponent(atob(str).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+        }
+    }
+    
+    // ========== ROT13 ==========
+    function rot13(str) {
+        return str.replace(/[a-zA-Z]/g, function(c) {
+            var base = (c <= 'Z') ? 65 : 97;
+            return String.fromCharCode((c.charCodeAt(0) - base + 13) % 26 + base);
+        });
+    }
+    
+    // ========== HARD ENCODE 5 LAYER ==========
+    function hardEncode(plain) {
+        try {
+            if (!plain) return "";
+            var l1 = encodeBase64(plain);
+            var l2 = rot13(l1);
+            var l3 = l2.split('').reverse().join('');
+            var l4 = l3.split('').map(function(ch) { return String.fromCharCode(ch.charCodeAt(0) ^ 0x42); }).join('');
+            var l5 = encodeURIComponent(l4);
+            return l5;
+        } catch(e) { return "ERROR: " + e.message; }
+    }
+    
+    // ========== HARD DECODE 5 LAYER ==========
+    function hardDecode(encoded) {
+        try {
+            if (!encoded) return "";
+            var l5 = decodeURIComponent(encoded);
+            var l4 = l5.split('').map(function(ch) { return String.fromCharCode(ch.charCodeAt(0) ^ 0x42); }).join('');
+            var l3 = l4.split('').reverse().join('');
+            var l2 = rot13(l3);
+            var l1 = decodeBase64(l2);
+            return l1;
+        } catch(e) { return "DECODE ERROR: " + e.message; }
+    }
+    
+    // ========== GENERATE AUTO DECODE HTML (TANPA ERROR) ==========
+    function generateAutoDecodeHTML(encodedData) {
+        var escaped = encodedData.replace(/\\/g, '\\\\').replace(/`/g, '\\`');
+        
+        // Template HTML untuk auto decode
+        var template = '<!DOCTYPE html>\n';
+        template += '<html>\n';
+        template += '<head><meta charset="UTF-8"><title>AUTO DECODE</title>\n';
+        template += '<style>\n';
+        template += '*{margin:0;padding:0;box-sizing:border-box;}\n';
+        template += 'body{background:#0a0a0a;font-family:monospace;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px;}\n';
+        template += '.loader{text-align:center;color:#0f0;background:#111;padding:40px;border-radius:20px;border:1px solid #ff0040;}\n';
+        template += '.spinner{width:50px;height:50px;border:3px solid #ff0040;border-top-color:transparent;border-radius:50%;animation:s 1s linear infinite;margin:20px auto;}\n';
+        template += '@keyframes s{to{transform:rotate(360deg);}}\n';
+        template += '.error{color:#ff0040;}\n';
+        template += '</style>\n';
+        template += '</head>\n';
+        template += '<body>\n';
+        template += '<div id="app">\n';
+        template += '<div class="loader" id="loader">\n';
+        template += '<div class="spinner"></div>\n';
+        template += '<h2>🔓 DECODING 5 LAYER...</h2>\n';
+        template += '<div id="status"></div>\n';
+        template += '</div>\n';
+        template += '</div>\n';
+        template += '<script>\n';
+        template += 'var data = `' + escaped + '`;\n';
+        template += 'function us(msg){var el=document.getElementById("status");if(el)el.innerHTML=msg;}\n';
+        template += 'function r13(s){return s.replace(/[a-zA-Z]/g,function(c){var b=c<="Z"?65:97;return String.fromCharCode((c.charCodeAt(0)-b+13)%26+b);});}\n';
+        template += 'function b64d(s){try{return atob(s);}catch(e){return decodeURIComponent(atob(s).split("").map(function(c){return "%"+("00"+c.charCodeAt(0).toString(16)).slice(-2);}).join(""));}}\n';
+        template += 'try{\n';
+        template += 'us("Layer 5/5...");var l5=decodeURIComponent(data);\n';
+        template += 'us("Layer 4/5...");var l4=l5.split("").map(function(ch){return String.fromCharCode(ch.charCodeAt(0)^0x42);}).join("");\n';
+        template += 'us("Layer 3/5...");var l3=l4.split("").reverse().join("");\n';
+        template += 'us("Layer 2/5...");var l2=r13(l3);\n';
+        template += 'us("Layer 1/5...");var l1=b64d(l2);\n';
+        template += 'us("✅ SUCCESS!");\n';
+        template += 'document.open();document.write(l1);document.close();\n';
+        template += '}catch(e){document.getElementById("app").innerHTML=\'<div class="loader" style="color:#ff0040"><h2>❌ GAGAL</h2><p>\'+e.message+\'</p></div>\';}\n';
+        template += '<\/script>\n';
+        template += '</body>\n';
+        template += '</html>';
+        
+        return template;
+    }
+
+    // ========== DOM ELEMENTS ==========
+    var inputText = document.getElementById('inputText');
+    var encodedInput = document.getElementById('encodedInput');
+    var generateInput = document.getElementById('generateInput');
+    var encodeResult = document.getElementById('encodeResult');
+    var decodeResult = document.getElementById('decodeResult');
+    var generateResult = document.getElementById('generateResult');
+    var encodeOutput = document.getElementById('encodeOutput');
+    var decodeOutput = document.getElementById('decodeOutput');
+    var generateOutput = document.getElementById('generateOutput');
+    var statusEncode = document.getElementById('statusEncode');
+    var statusDecode = document.getElementById('statusDecode');
+    var statusGenerate = document.getElementById('statusGenerate');
+
+    // ========== SWITCH TAB ==========
+    var tabs = document.querySelectorAll('.tab');
+    var panels = {
+        encode: document.getElementById('panelEncode'),
+        decode: document.getElementById('panelDecode'),
+        generate: document.getElementById('panelGenerate')
+    };
+    
+    for (var i = 0; i < tabs.length; i++) {
+        tabs[i].onclick = function() {
+            var target = this.getAttribute('data-tab');
+            for (var j = 0; j < tabs.length; j++) {
+                tabs[j].classList.remove('active');
+            }
+            this.classList.add('active');
+            for (var key in panels) {
+                panels[key].style.display = 'none';
+            }
+            panels[target].style.display = 'block';
+        };
+    }
+
+    // ========== ENCODE ==========
+    document.getElementById('btnEncode').onclick = function() {
+        var input = inputText.value;
+        if (!input.trim()) { alert('Masukkan teks dulu!'); return; }
+        var result = hardEncode(input);
+        encodeResult.textContent = result;
+        encodeOutput.style.display = 'block';
+        encodedInput.value = result;
+        generateInput.value = result;
+        statusEncode.innerHTML = '✅ Encode berhasil! Panjang: ' + result.length + ' karakter';
+        encodeOutput.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    // ========== DECODE ==========
+    document.getElementById('btnDecode').onclick = function() {
+        var encoded = encodedInput.value;
+        if (!encoded.trim()) { alert('Paste hasil encode dulu!'); return; }
+        var result = hardDecode(encoded);
+        decodeResult.textContent = result;
+        decodeOutput.style.display = 'block';
+        if (result.includes('ERROR')) {
+            statusDecode.innerHTML = '❌ ' + result;
+        } else {
+            statusDecode.innerHTML = '✅ Decode berhasil! Panjang: ' + result.length + ' karakter';
+        }
+        decodeOutput.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    // ========== GENERATE ==========
+    document.getElementById('btnGenerate').onclick = function() {
+        var encoded = generateInput.value;
+        if (!encoded.trim()) { alert('Paste hasil encode dulu!'); return; }
+        var html = generateAutoDecodeHTML(encoded);
+        generateResult.textContent = html;
+        generateOutput.style.display = 'block';
+        statusGenerate.innerHTML = '✅ Auto decode HTML siap! Klik COPY atau DOWNLOAD';
+        generateOutput.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    // ========== COPY BUTTONS ==========
+    document.getElementById('copyEncode').onclick = function() {
+        var text = encodeResult.textContent;
+        if (text && text !== '') { navigator.clipboard.writeText(text); alert('✅ Copy berhasil!'); }
+        else { alert('Tidak ada hasil!'); }
+    };
+    document.getElementById('copyDecode').onclick = function() {
+        var text = decodeResult.textContent;
+        if (text && text !== '') { navigator.clipboard.writeText(text); alert('✅ Copy berhasil!'); }
+        else { alert('Tidak ada hasil!'); }
+    };
+    document.getElementById('copyGenerate').onclick = function() {
+        var text = generateResult.textContent;
+        if (text && text !== '') { navigator.clipboard.writeText(text); alert('✅ Copy berhasil!'); }
+        else { alert('Generate dulu!'); }
+    };
+
+    // ========== DOWNLOAD ==========
+    document.getElementById('downloadGenerate').onclick = function() {
+        var text = generateResult.textContent;
+        if (text && text !== '') {
+            var blob = new Blob([text], {type: 'text/html'});
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'auto_decode.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            alert('✅ Download berhasil!');
+        } else { alert('Generate dulu!'); }
+    };
+
+    // ========== CLEAR BUTTONS ==========
+    document.getElementById('btnClearEncode').onclick = function() {
+        inputText.value = '';
+        encodeOutput.style.display = 'none';
+        statusEncode.innerHTML = '💡 Masukkan teks, lalu klik ENCODE';
+    };
+    document.getElementById('btnClearDecode').onclick = function() {
+        encodedInput.value = '';
+        decodeOutput.style.display = 'none';
+        statusDecode.innerHTML = '💡 Paste hasil encode, lalu klik DECODE';
+    };
+    document.getElementById('btnClearGenerate').onclick = function() {
+        generateInput.value = '';
+        generateOutput.style.display = 'none';
+        statusGenerate.innerHTML = '💡 Paste hasil encode, lalu klik GENERATE';
+    };
+</script>
+</body>
+</html>
